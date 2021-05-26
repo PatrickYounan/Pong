@@ -1,4 +1,4 @@
 # Pong
 Pong written in C# with Raylib.
 
-![Imgur](https://imgur.com/nVRBP15)
+![pong](https://user-images.githubusercontent.com/84838050/119625702-d4fc5d00-be4d-11eb-99e8-f1fe6b19158f.png)
