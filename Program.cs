@@ -8,6 +8,7 @@ namespace Pong
     {
         private static void Main()
         {
+            InitAudioDevice();
             InitWindow(960, 600, "Pong - C# Raylib");
             SetTargetFPS(60);
 
@@ -17,7 +18,7 @@ namespace Pong
             while (!WindowShouldClose())
             {
                 BeginDrawing();
-                ClearBackground(Color.WHITE);
+                ClearBackground(Color.DARKGREEN);
 
                 canvas.UpdateAndRender();
 

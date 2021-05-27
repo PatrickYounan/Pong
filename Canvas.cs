@@ -25,6 +25,9 @@ namespace Pong
         private Vector2 endLine;
 
         private Vector2 ball;
+        
+        private Sound hit;
+        private Sound win;
 
         public void Init()
         {
@@ -33,6 +36,12 @@ namespace Pong
             enemy = new Rectangle(10, Raylib.GetScreenHeight() / 2 - 70, 10, 140);
             startLine = new Vector2(Raylib.GetScreenWidth() / 2f, 0);
             endLine = new Vector2(Raylib.GetScreenWidth() / 2f, Raylib.GetScreenHeight());
+            
+            hit = Raylib.LoadSound("res/hit.wav");
+            win = Raylib.LoadSound("res/win.wav");
+            Raylib.SetSoundVolume(hit, 0.2f);
+            Raylib.SetSoundVolume(win, 0.2f);
+
             RandomizeBallSpeed();
         }
 
@@ -43,10 +52,15 @@ namespace Pong
             RandomizeBallSpeed();
         }
 
+        private int NextSpeed()
+        {
+            return DIRECTIONS[random.Next(DIRECTIONS.Length)];
+        }
+
         private void RandomizeBallSpeed()
         {
-            ballSpeed.X *= DIRECTIONS[random.Next(DIRECTIONS.Length)];
-            ballSpeed.Y *= DIRECTIONS[random.Next(DIRECTIONS.Length)];
+            ballSpeed.X *= NextSpeed();
+            ballSpeed.Y *= NextSpeed();
         }
 
         private void UpdatePlayerInput()
@@ -76,6 +90,7 @@ namespace Pong
             if (ball.X <= ballRadius)
             {
                 score.Y++;
+                Raylib.PlaySound(win);
                 RestartCanvas();
             }
             else if (ball.X + ballRadius >= Raylib.GetScreenWidth())
@@ -84,7 +99,9 @@ namespace Pong
                 RestartCanvas();
             }
 
-            if (Raylib.CheckCollisionCircleRec(ball, ballRadius, player) || Raylib.CheckCollisionCircleRec(ball, ballRadius, enemy)) ballSpeed.X *= -1;
+            if (!Raylib.CheckCollisionCircleRec(ball, ballRadius, player) && !Raylib.CheckCollisionCircleRec(ball, ballRadius, enemy)) return;
+            ballSpeed.X *= -1;
+            Raylib.PlaySound(hit);
         }
 
         public void UpdateAndRender()
@@ -93,13 +110,13 @@ namespace Pong
             UpdateEnemy();
             UpdateBallLogic();
 
-            Raylib.DrawRectangleRec(player, Color.BLACK);
-            Raylib.DrawRectangleRec(enemy, Color.BLACK);
-            Raylib.DrawLineEx(startLine, endLine, 1f, Color.GRAY);
-            Raylib.DrawCircle((int) ball.X, (int) ball.Y, ballRadius, Color.RED);
+            Raylib.DrawRectangleRec(player, Color.BLUE);
+            Raylib.DrawRectangleRec(enemy, Color.RED);
+            Raylib.DrawLineEx(startLine, endLine, 1f, Color.BLACK);
+            Raylib.DrawCircle((int) ball.X, (int) ball.Y, ballRadius, Color.WHITE);
 
-            Raylib.DrawText(score.X.ToString(CultureInfo.CurrentCulture), 20, 40, 20, Color.BLACK); // enemy score.
-            Raylib.DrawText(score.Y.ToString(CultureInfo.CurrentCulture), Raylib.GetScreenWidth() - 30, 40, 20, Color.BLACK); // player score.
+            Raylib.DrawText(score.X.ToString(CultureInfo.CurrentCulture), Raylib.GetScreenWidth() / 2 - 30, 20, 20, Color.BLACK); // enemy score.
+            Raylib.DrawText(score.Y.ToString(CultureInfo.CurrentCulture), Raylib.GetScreenWidth() / 2 + 15, 20, 20, Color.BLACK); // player score.
         }
     }
 }
