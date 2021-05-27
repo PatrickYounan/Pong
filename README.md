@@ -1,4 +1,4 @@
 # Pong
 A simple pong game written in C# with Raylib.
 
-![pong](https://user-images.githubusercontent.com/84838050/119625702-d4fc5d00-be4d-11eb-99e8-f1fe6b19158f.png)
+![pong](https://user-images.githubusercontent.com/84838050/119773048-6f6aa800-bf03-11eb-97c5-baa3bd02da7f.png)
